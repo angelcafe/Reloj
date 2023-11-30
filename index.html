@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="./front/imagenes/icon-192x192.png" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="stylesheet" href="./front/estilos/estilo.css" />
+    <title>Reloj</title>
+</head>
+
+<body>
+    <main class="container-fluid">
+        <div class="row pt-5 text-center">
+            <div class="col-1">
+                <i id="sonido" class="bi bi-volume-mute-fill"></i>
+            </div>
+            <div class="col-1">
+                <i id="alarma" class="bi bi-alarm"></i>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 reloj">
+                <span id="horas"></span>:<span id="minutos"></span>:<span id="segundos"></span>
+            </div>
+        </div>
+    </main>
+    <div class="modal fade" id="alarma-ventana" tabindex="-1" aria-labelledby="alarmaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered text-black">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="alarmaLabel">Configurar alarma</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="alarma-activar-desactivar">
+                            <label class="form-check-label" for="alarma-activar-desactivar">Activar/Desactivar alarma</label>
+                        </div>
+                        <br>
+                        <div class="mb-3 input-group">
+                            <span class="input-group-text">Hora:</span>
+                            <input type="number" max="23" min="0" class="form-control" id="alarma-hora" value="0">
+                            <span class="input-group-text">Minutos:</span>
+                            <input type="number" max="59" min="0" class="form-control" id="alarma-minuto" value="0">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="alarma-cancelar">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="alarma-guardar">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <audio>
+        <source src="" type="audio/mpeg">
+    </audio>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script type="module" src="./front/scripts/script.js"></script>
+</body>
+
+</html>

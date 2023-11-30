@@ -1,0 +1,16 @@
+{
+    "background_color": "#000000",
+    "description": "Reloj y alarma",
+    "display": "standalone",
+    "icons": [
+        {
+            "sizes": "192x192",
+            "src": "./front/imagenes/icon-192x192.png",
+            "type": "image/png"
+        }
+    ],
+    "name": "Reloj y Alarma",
+    "short_name": "Reloj",
+    "start_url": "index.html",
+    "theme_color": "#000000"
+}
