@@ -75,8 +75,8 @@ class Reloj {
     sonidos() {
         if (this.sonido_alarma && this.segundos === 0 && this.alarma_minuto === this.minutos && this.alarma_hora === this.horas) {
             this.funcion_alarma();
-            // } else if (this.sonido_hora && this.segundos === 0 && this.minutos === 0) {
-        } else if (this.sonido_hora && this.segundos === 0) {
+        } else if (this.sonido_hora && this.segundos === 0 && this.minutos === 0) {
+            // } else if (this.sonido_hora && this.segundos === 0) {
             this.funcion_hora();
         }
     }

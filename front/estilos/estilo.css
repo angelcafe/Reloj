@@ -4,8 +4,6 @@
 
 /* Varibles */
 :root {
-    --color-fondo: black;
-    --color-texto: white;
     --reloj-ancho: 27vw;
     --reloj-fuente: 'digital-dismay';
 }
@@ -19,8 +17,6 @@
 html,
 body,
 main {
-    color: var(--color-texto);
-    background-color: var(--color-fondo);
     height: 100%;
 }
 

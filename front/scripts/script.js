@@ -3,24 +3,9 @@ import { Reloj } from "./Reloj.js";
 /* Elemento audio */
 const audio = document.getElementsByTagName('audio')[0];
 
-/* Script para el sonido de las horas */
-function sonido_hora() {
-    audio.src = './front/sonidos/beep02.mp3';
-    audio.loopo = false;
-    audio.play();
-}
-
-/* Script para el sonido de los minutos */
-const sonido_minuto = function () {
-    audio.src = './front/sonidos/beep01.mp3';
-    audio.loop = false;
-    audio.play();
-}
-
 /* Inicializa la clase Reloj */
 const reloj = new Reloj();
-// reloj.setHora(sonido_hora);
-reloj.setHora(sonido_minuto);
+reloj.setHora(sonidoHora);
 printTiempo();
 
 /* Leer alarma */
@@ -42,18 +27,16 @@ if (localStorage.getItem('alarma_minuto')) {
 }
 if (localStorage.getItem('alarma_estado')) {
     const ls_alarma_estado = localStorage.getItem('alarma_estado') === 'true';
-    document.getElementById('alarma-activar-desactivar').checked = ls_alarma_estado;
+    // document.getElementById('alarma-activar-desactivar').checked = ls_alarma_estado;
     reloj.setSonidoAlarma(ls_alarma_estado);
+    alarmaActivarDesactivar(ls_alarma_estado);
 }
-
-/* Ventana alarma */
-const myModal = new bootstrap.Modal('#alarma-ventana');
 
 /* Eventos sonido y alarma */
 document.getElementById('sonido').addEventListener('click', sonidoActivarDesactivar);
-document.getElementById('alarma').addEventListener('click', function () { myModal.show(document.getElementById('alarma-ventana')) });
-document.getElementById('alarma-guardar').addEventListener('click', alarmaGuardar);
-document.getElementById('alarma-activar-desactivar').addEventListener('change', alarmaActivarDesactivar);
+document.getElementById('alarma').addEventListener('click', alarmaActivarDesactivar);
+document.getElementById('alarma-hora').addEventListener('change', alarmaGuardar);
+document.getElementById('alarma-minuto').addEventListener('change', alarmaGuardar);
 
 /* Segundero */
 setInterval(function () {
@@ -67,31 +50,34 @@ const sonido_alarma = function () {
     audio.loop = false;
     audio.play();
 }
+reloj.setAlarma(sonido_alarma);
 
 /* Activa o desactiva el sonido de la alarma */
-function alarmaActivarDesactivar(e) {
-    const alarma = document.getElementById('alarma');
-    if (e.srcElement.checked) {
-        alarma.classList.remove('bi-alarm');
-        alarma.classList.add('bi-alarm-fill');
+function alarmaActivarDesactivar(estado) {
+    const elemento = document.getElementById('alarma');
+    switch (typeof (estado)) {
+        case 'object':
+            estado = !elemento.className.includes('bi-alarm-fill');
+            break;
+    }
+    if (estado) {
+        elemento.classList.remove('bi-alarm');
+        elemento.classList.add('bi-alarm-fill');
         reloj.setSonidoAlarma(true);
+        localStorage.setItem('alarma_estado', true);
     } else {
-        alarma.classList.remove('bi-alarm-fill');
-        alarma.classList.add('bi-alarm');
+        audio.pause();
+        elemento.classList.remove('bi-alarm-fill');
+        elemento.classList.add('bi-alarm');
         reloj.setSonidoAlarma(false);
+        localStorage.setItem('alarma_estado', false);
     }
 }
 
-/* Guarda la hora y el minuto de la alarma, activa el icono y el sonido */
+/* Guarda la hora y el minuto de la alarma */
 function alarmaGuardar() {
     reloj.setAlarmaHora(alarma_hora.value);
     reloj.setAlarmaMinuto(alarma_minuto.value);
-    myModal.hide(document.getElementById('alarma-ventana'));
-
-    reloj.setAlarma(sonido_alarma);
-    reloj.setSonidoAlarma(true);
-
-    localStorage.setItem('alarma_estado', document.getElementById('alarma-activar-desactivar').checked);
     localStorage.setItem('alarma_hora', alarma_hora.value);
     localStorage.setItem('alarma_minuto', alarma_minuto.value);
 }
@@ -117,8 +103,9 @@ function sonidoActivarDesactivar(e) {
     }
 }
 
-
-/* Asigna el color del texto */
-function setColorTexto(color) {
-    document.documentElement.style.setProperty('--color-texto', color);
+/* Script para el sonido de las horas */
+function sonidoHora() {
+    audio.src = './front/sonidos/beep01.mp3';
+    audio.loopo = false;
+    audio.play();
 }
