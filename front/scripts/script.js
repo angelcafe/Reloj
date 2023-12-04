@@ -1,36 +1,21 @@
 import { Reloj } from "./Reloj.js";
 
-/* Elemento audio */
-const audio = document.getElementsByTagName('audio')[0];
-
 /* Inicializa la clase Reloj */
 const reloj = new Reloj();
 reloj.setHora(sonidoHora);
 printTiempo();
 
-/* Leer alarma */
+/* Segundero */
+setInterval(function () {
+    reloj.setTiempo();
+    printTiempo();
+}, 1000);
+
+/* Crear constantes */
+const audio = document.getElementsByTagName('audio')[0];
 const alarma_hora = document.getElementById('alarma-hora');
 const alarma_minuto = document.getElementById('alarma-minuto');
-if (localStorage.getItem('alarma_hora')) {
-    const ls_alarma_hora = parseInt(localStorage.getItem('alarma_hora'));
-    alarma_hora.value = ls_alarma_hora;
-    reloj.alarma_hora = ls_alarma_hora;
-} else {
-    alarma_hora.value = 0;
-}
-if (localStorage.getItem('alarma_minuto')) {
-    const ls_alarma_minuto = parseInt(localStorage.getItem('alarma_minuto'));
-    alarma_minuto.value = ls_alarma_minuto;
-    reloj.alarma_minuto = ls_alarma_minuto;
-} else {
-    alarma_minuto.value = 0;
-}
-if (localStorage.getItem('alarma_estado')) {
-    const ls_alarma_estado = localStorage.getItem('alarma_estado') === 'true';
-    // document.getElementById('alarma-activar-desactivar').checked = ls_alarma_estado;
-    reloj.setSonidoAlarma(ls_alarma_estado);
-    alarmaActivarDesactivar(ls_alarma_estado);
-}
+obtenerDatos();
 
 /* Eventos sonido y alarma */
 document.getElementById('sonido').addEventListener('click', sonidoActivarDesactivar);
@@ -38,11 +23,8 @@ document.getElementById('alarma').addEventListener('click', alarmaActivarDesacti
 document.getElementById('alarma-hora').addEventListener('change', alarmaGuardar);
 document.getElementById('alarma-minuto').addEventListener('change', alarmaGuardar);
 
-/* Segundero */
-setInterval(function () {
-    reloj.setTiempo();
-    printTiempo();
-}, 1000);
+/* Otros eventos */
+document.getElementById('modo-oscuro').addEventListener('change', activarDesactivarModoOscuro);
 
 /* Script para el sonido de la alarma */
 const sonido_alarma = function () {
@@ -51,6 +33,14 @@ const sonido_alarma = function () {
     audio.play();
 }
 reloj.setAlarma(sonido_alarma);
+
+function activarDesactivarModoOscuro(e) {
+    if (e.currentTarget.checked) {
+        document.getElementsByTagName('html')[0].setAttribute('data-bs-theme', 'dark');
+    } else {
+        document.getElementsByTagName('html')[0].setAttribute('data-bs-theme', 'light');
+    }
+}
 
 /* Activa o desactiva el sonido de la alarma */
 function alarmaActivarDesactivar(estado) {
@@ -80,6 +70,29 @@ function alarmaGuardar() {
     reloj.setAlarmaMinuto(alarma_minuto.value);
     localStorage.setItem('alarma_hora', alarma_hora.value);
     localStorage.setItem('alarma_minuto', alarma_minuto.value);
+}
+
+function obtenerDatos() {
+    if (localStorage.getItem('alarma_hora')) {
+        const ls_alarma_hora = parseInt(localStorage.getItem('alarma_hora'));
+        alarma_hora.value = ls_alarma_hora;
+        reloj.alarma_hora = ls_alarma_hora;
+    } else {
+        alarma_hora.value = 0;
+    }
+    if (localStorage.getItem('alarma_minuto')) {
+        const ls_alarma_minuto = parseInt(localStorage.getItem('alarma_minuto'));
+        alarma_minuto.value = ls_alarma_minuto;
+        reloj.alarma_minuto = ls_alarma_minuto;
+    } else {
+        alarma_minuto.value = 0;
+    }
+    if (localStorage.getItem('alarma_estado')) {
+        const ls_alarma_estado = localStorage.getItem('alarma_estado') === 'true';
+        // document.getElementById('alarma-activar-desactivar').checked = ls_alarma_estado;
+        reloj.setSonidoAlarma(ls_alarma_estado);
+        alarmaActivarDesactivar(ls_alarma_estado);
+    }
 }
 
 /* Muestra el tiempo */
