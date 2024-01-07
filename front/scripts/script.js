@@ -17,14 +17,19 @@ const alarma_hora = document.getElementById('alarma-hora');
 const alarma_minuto = document.getElementById('alarma-minuto');
 obtenerDatos();
 
-/* Eventos sonido y alarma */
-document.getElementById('sonido').addEventListener('click', sonidoActivarDesactivar);
-document.getElementById('alarma').addEventListener('click', alarmaActivarDesactivar);
-document.getElementById('alarma-hora').addEventListener('change', alarmaGuardar);
-document.getElementById('alarma-minuto').addEventListener('change', alarmaGuardar);
+/* Definir los elementos y sus correspondientes funciones */
+const elementos = [
+    { id: 'sonido', evento: 'click', funcion: sonidoActivarDesactivar },
+    { id: 'alarma', evento: 'click', funcion: alarmaActivarDesactivar },
+    { id: 'alarma-hora', evento: 'change', funcion: alarmaGuardar },
+    { id: 'alarma-minuto', evento: 'change', funcion: alarmaGuardar },
+    { id: 'modo-oscuro', evento: 'click', funcion: activarDesactivarModoOscuro }
+];
 
-/* Otros eventos */
-document.getElementById('modo-oscuro').addEventListener('change', activarDesactivarModoOscuro);
+/* Agregar los event listeners utilizando un bucle */
+elementos.forEach(elemento => {
+    document.getElementById(elemento.id).addEventListener(elemento.evento, elemento.funcion);
+});
 
 /* Script para el sonido de la alarma */
 const sonido_alarma = function () {
@@ -35,30 +40,31 @@ const sonido_alarma = function () {
 reloj.setAlarma(sonido_alarma);
 
 function activarDesactivarModoOscuro(e) {
-    if (e.currentTarget.checked) {
-        document.getElementsByTagName('html')[0].setAttribute('data-bs-theme', 'dark');
+    const dt = document.getElementsByTagName('html')[0];
+    if (dt.getAttribute('data-bs-theme') === 'dark') {
+        dt.setAttribute('data-bs-theme', 'light');
     } else {
-        document.getElementsByTagName('html')[0].setAttribute('data-bs-theme', 'light');
+        dt.setAttribute('data-bs-theme', 'dark');
     }
 }
 
 /* Activa o desactiva el sonido de la alarma */
 function alarmaActivarDesactivar(estado) {
-    const elemento = document.getElementById('alarma');
-    switch (typeof (estado)) {
-        case 'object':
-            estado = !elemento.className.includes('bi-alarm-fill');
-            break;
+    const elemento = document.getElementById('alarma').classList;
+    const claseAlarmaFill = 'bi-alarm-fill';
+    const claseAlarma = 'bi-alarm';
+
+    if (typeof estado === 'object') {
+        estado = !elemento.contains(claseAlarmaFill);
     }
+
     if (estado) {
-        elemento.classList.remove('bi-alarm');
-        elemento.classList.add('bi-alarm-fill');
+        elemento.replace(claseAlarma, claseAlarmaFill);
         reloj.setSonidoAlarma(true);
         localStorage.setItem('alarma_estado', true);
     } else {
         audio.pause();
-        elemento.classList.remove('bi-alarm-fill');
-        elemento.classList.add('bi-alarm');
+        elemento.replace(claseAlarmaFill, claseAlarma);
         reloj.setSonidoAlarma(false);
         localStorage.setItem('alarma_estado', false);
     }
@@ -73,25 +79,25 @@ function alarmaGuardar() {
 }
 
 function obtenerDatos() {
-    if (localStorage.getItem('alarma_hora')) {
-        const ls_alarma_hora = parseInt(localStorage.getItem('alarma_hora'));
-        alarma_hora.value = ls_alarma_hora;
-        reloj.alarma_hora = ls_alarma_hora;
-    } else {
-        alarma_hora.value = 0;
-    }
-    if (localStorage.getItem('alarma_minuto')) {
-        const ls_alarma_minuto = parseInt(localStorage.getItem('alarma_minuto'));
-        alarma_minuto.value = ls_alarma_minuto;
-        reloj.alarma_minuto = ls_alarma_minuto;
-    } else {
-        alarma_minuto.value = 0;
-    }
-    if (localStorage.getItem('alarma_estado')) {
-        const ls_alarma_estado = localStorage.getItem('alarma_estado') === 'true';
-        // document.getElementById('alarma-activar-desactivar').checked = ls_alarma_estado;
-        reloj.setSonidoAlarma(ls_alarma_estado);
-        alarmaActivarDesactivar(ls_alarma_estado);
+    const obtenerYAsignar = (clave, elemento, propiedad) => {
+        const valorLocalStorage = localStorage.getItem(clave);
+        if (valorLocalStorage) {
+            const valorParseado = parseInt(valorLocalStorage);
+            elemento.value = valorParseado;
+            reloj[propiedad] = valorParseado;
+        } else {
+            elemento.value = 0;
+        }
+    };
+
+    obtenerYAsignar('alarma_hora', alarma_hora, 'alarma_hora');
+    obtenerYAsignar('alarma_minuto', alarma_minuto, 'alarma_minuto');
+
+    const lsAlarmaEstado = localStorage.getItem('alarma_estado');
+    if (lsAlarmaEstado) {
+        const lsAlarmaEstadoBooleano = lsAlarmaEstado === 'true';
+        reloj.setSonidoAlarma(lsAlarmaEstadoBooleano);
+        alarmaActivarDesactivar(lsAlarmaEstadoBooleano);
     }
 }
 
@@ -105,13 +111,13 @@ function printTiempo() {
 /* Activa o desactiva el sonido */
 /* Esto se hace porque por defecto, en un navegador, no suena nada sin pulsar en la ventana */
 function sonidoActivarDesactivar(e) {
-    if (e.srcElement.className.includes('bi-volume-mute-fill')) {
-        e.srcElement.classList.remove('bi-volume-mute-fill');
-        e.srcElement.classList.add('bi-volume-up-fill');
+    const elemento = e.target.classList;
+
+    if (elemento.contains('bi-volume-mute-fill')) {
+        elemento.replace('bi-volume-mute-fill', 'bi-volume-up-fill');
         reloj.setSonido(true);
     } else {
-        e.srcElement.classList.remove('bi-volume-up-fill');
-        e.srcElement.classList.add('bi-volume-mute-fill');
+        elemento.replace('bi-volume-up-fill', 'bi-volume-mute-fill');
         reloj.setSonido(false);
     }
 }

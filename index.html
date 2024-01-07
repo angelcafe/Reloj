@@ -13,35 +13,31 @@
 
 <body>
     <main class="container-fluid">
-        <div class="row h-100 align-items-center">
-            <div class="col">
-                <div class="row">
-                    <div class="col-3 col-sm-4 col-md-3 col-lg-2">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="modo-oscuro" checked>
-                            <label class="form-check-label" for="modo-oscuro">Modo oscuro</label>
-                        </div>
-                    </div>
-                    <div class="col-1">
-                        <div class="input-group">
-                            <i id="sonido" class="bi bi-volume-mute-fill input-group-text d-block"></i>
-                        </div>
-                    </div>
-                    <div class="col-7 col-sm-4 col-md-3 col-lg-2">
-                        <div class="input-group">
-                            <i id="alarma" class="bi bi-alarm input-group-text"></i>
-                            <input type="number" max="23" min="0" class="form-control" id="alarma-hora" value="0">
-                            <input type="number" max="59" min="0" class="form-control" id="alarma-minuto" value="0">
-                        </div>
-                    </div>
+        <div class="row my-2">
+            <div class="col-1">
+                <i id="modo-oscuro" class="bi bi-brightness-high-fill"></i>
+            </div>
+            <div class="col-1">
+                <i id="sonido" class="bi bi-volume-mute-fill"></i>
+            </div>
+            <div class="col-1">
+                <i id="alarma" class="bi bi-alarm"></i>
+            </div>
+            <div class="col-3">
+                <div class=" input-group">
+                    <input type="number" max="23" min="0" class="form-control form-control-sm" id="alarma-hora" value="0">
+                    <input type="number" max="59" min="0" class="form-control form-control-sm" id="alarma-minuto" value="0">
                 </div>
-                <div class="row text-center">
-                    <div class="col-12 reloj lh-1">
-                        <span id="horas"></span>:<span id="minutos"></span>:<span id="segundos"></span>
+            </div>
+            <div class="row align-items-center">
+                <div class="col">
+                    <div class="row">
+                        <div class="col-12 reloj lh-1">
+                            <span id="horas"></span>:<span id="minutos"></span>:<span id="segundos"></span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     </main>
     <audio>
         <source src="" type="audio/mpeg">
